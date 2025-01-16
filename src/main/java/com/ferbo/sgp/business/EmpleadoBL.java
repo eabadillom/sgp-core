@@ -2,7 +2,9 @@
 package com.ferbo.sgp.business;
 
 import com.ferbo.sgp.dao.EmpleadoDAO;
+import com.ferbo.sgp.dao.ParametroDAO;
 import com.ferbo.sgp.model.Empleado;
+import com.ferbo.sgp.model.Parametro;
 import com.ferbo.sgp.model.Vacaciones;
 import com.ferbo.sgp.util.DateUtil;
 import com.ferbo.sgp.util.SGPException;
@@ -34,6 +36,10 @@ public class EmpleadoBL {
         int diatmp = DateUtil.getDia(empleado.getDatoEmpresarial().getFechaIngreso());
 
         Date fechaaux = DateUtil.getDate(aniotmp, mestmp, diatmp);
+        
+        if(!empleado.getVacacion().isEmpty()){
+            fechaaux = empleado.getVacacion().get(empleado.getVacacion().size() - 1).getFechafin();
+        }
 
         while (fechaaux.before(DateUtil.now())) {
             Date fechainicio = null;
@@ -43,11 +49,12 @@ public class EmpleadoBL {
             int dias = 0;
 
             if (empleado.getVacacion().isEmpty()) {
-
                 fechainicio = fechaaux;
                 fechafin = DateUtil.addYear(fechaaux, 1);
-
-                dias = 12;
+                ParametroDAO parametroDAO = new ParametroDAO(Parametro.class);
+                Parametro parametro = parametroDAO.buscarPorClave("DIVAC");
+                String sDias = parametro.getValor();
+                dias = Integer.parseInt(sDias);
             } else {
                 dias = empleado.getVacacion().get(empleado.getVacacion().size() - 1).getDiastotales();
                 fechatmp = empleado.getVacacion().get(empleado.getVacacion().size() - 1).getFechafin();

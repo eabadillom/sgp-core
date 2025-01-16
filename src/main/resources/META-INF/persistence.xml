@@ -4,13 +4,14 @@
         <class>com.ferbo.model.Empleado</class>
         <class>com.ferbo.model.DatoEmpresarial</class> 
         <class>com.ferbo.model.Vacaciones</class>
+        <class>com.ferbo.sgp.model.Parametro</class>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
-            <!-- Datos de la conexión JDBC -->
+            <!-- Datos de la conexión JDBC 
             <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/sgp"/>
             <property name="hibernate.connection.username" value="sgpuser"/>
-            <property name="hibernate.connection.password" value="pruebas123"/>
+            <property name="hibernate.connection.password" value="pruebas123"/>-->
 
             <!-- Dialecto de Hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
@@ -19,8 +20,9 @@
             <property name="hibernate.hbm2ddl.auto" value="update"/>
 
             <!-- Mostrar las consultas SQL (opcional, útil para depurar) -->
-            <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.connection.datasource" value="java:comp/env/jdbc/sgp"/>
+            <!--<property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>-->
         </properties>
         
     </persistence-unit>

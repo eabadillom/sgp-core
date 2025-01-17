@@ -7,8 +7,8 @@
     <version>0.1-SNAPSHOT</version>
     <name>sgp-core</name>
     <url>http://maven.apache.org</url>
-    
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <hibernate.version>5.6.15.Final</hibernate.version>
@@ -73,6 +73,7 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
         </plugins>

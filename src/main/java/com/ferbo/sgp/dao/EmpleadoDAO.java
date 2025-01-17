@@ -10,7 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-public class EmpleadoDAO extends BaseDAO{
+public class EmpleadoDAO extends BaseDAO<Empleado, Integer>{
     
     private static Logger log = LogManager.getLogger(EmpleadoDAO.class);
     

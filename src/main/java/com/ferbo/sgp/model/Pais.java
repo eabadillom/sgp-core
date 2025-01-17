@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @NamedQueries({
         @NamedQuery(name = "Pais.findById", query = "SELECT d FROM Pais d WHERE d.id = :cdPais"),
         @NamedQuery(name = "Pais.findByClave", query = "SELECT d FROM Pais d WHERE d.clave = :clavePais"),
-        @NamedQuery(name = "Pais.findAll", query = "SELECT d FROM Pais d ORDER BY d.nombrePais")
+        @NamedQuery(name = "Pais.findAll", query = "SELECT d FROM Pais d ORDER BY d.nombre")
 })
 public class Pais implements Serializable {
 
@@ -31,7 +31,7 @@ public class Pais implements Serializable {
     private String clave;
 
     @Column(name = "nb_pais")
-    private String nombrePais;
+    private String nombre;
 
     @Override
     public int hashCode() {
@@ -57,17 +57,17 @@ public class Pais implements Serializable {
 
     @Override
     public String toString() {
-        return "Pais [clavePais=" + clave + ", nombrePais=" + nombrePais + "]";
+        return "Pais [clave=" + clave + ", nombre=" + nombre + "]";
     }
 
     public Pais() {
     }
 
-    public Pais(Integer id, String clave, String nombrePais) {
+    public Pais(Integer id, String clave, String nombre) {
         super();
         this.id = id;
         this.clave = clave;
-        this.nombrePais = nombrePais;
+        this.nombre = nombre;
     }
 
     public Integer getId() {
@@ -86,12 +86,12 @@ public class Pais implements Serializable {
         this.clave = clave;
     }
 
-    public String getNombrePais() {
-        return nombrePais;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setNombrePais(String nombrePais) {
-        this.nombrePais = nombrePais;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
 }

@@ -106,6 +106,9 @@ public class Empleado implements Serializable {
     @JoinColumn(name = "id_empleado_empresa")
     private DatoEmpresarial datoEmpresarial;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "empleado")
+     private List<Asistencia> asistencias;
+    
     @OneToMany(mappedBy = "empleado", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<Vacaciones> vacacion;
     

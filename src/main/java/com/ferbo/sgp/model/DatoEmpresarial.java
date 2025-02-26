@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -96,6 +98,10 @@ public class DatoEmpresarial implements Serializable{
     @Basic(optional = true)
     @Column(name = "nb_baja")
     private String motivobaja;
+    
+    @ManyToOne
+    @JoinColumn(name = "id_planta", referencedColumnName = "id_planta")
+    private Planta planta;
 
     public DatoEmpresarial() {
     }
@@ -276,6 +282,16 @@ public class DatoEmpresarial implements Serializable{
     public void setMotivobaja(String motivobaja) {
         this.motivobaja = motivobaja;
     }
+
+    public Planta getPlanta() {
+        return planta;
+    }
+
+    public void setPlanta(Planta planta) {
+        this.planta = planta;
+    }
+    
+    
 
     @Override
     public int hashCode() {

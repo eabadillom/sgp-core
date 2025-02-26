@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.ferbo.sgp.model.DiaNoLaboral;
+import com.ferbo.sgp.util.DateUtil;
 
 public class DiaNoLaboralDAO extends BaseDAO<DiaNoLaboral, Integer> {
 	
@@ -47,5 +48,5 @@ public class DiaNoLaboralDAO extends BaseDAO<DiaNoLaboral, Integer> {
 		
 		return list;
 	}
-
+    
 }

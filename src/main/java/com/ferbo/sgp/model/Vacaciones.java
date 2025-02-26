@@ -40,6 +40,9 @@ public class Vacaciones implements Serializable {
     @Column(name = "st_dias_pend_pagados")
     private Boolean diaspendientespagados;
     
+    @Column(name = "nu_dias_pagados")
+    private Integer diasPagados;
+    
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_empleado", referencedColumnName = "id_empleado")
     private Empleado empleado;
@@ -116,6 +119,14 @@ public class Vacaciones implements Serializable {
     public void setDiaspendientespagados(Boolean diaspendientespagados) {
         this.diaspendientespagados = diaspendientespagados;
     }
+
+    public Integer getDiasPagados() {
+        return diasPagados;
+    }
+
+    public void setDiasPagados(Integer diasPagados) {
+        this.diasPagados = diasPagados;
+    } 
 
     public Empleado getEmpleado() {
         return empleado;

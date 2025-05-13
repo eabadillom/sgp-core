@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="sgpCR" transaction-type="RESOURCE_LOCAL">
+    	<class>com.ferbo.sgp.model.DatoEmpresarial</class>
+    	<class>com.ferbo.sgp.model.DiaNoLaboral</class>
+    	<class>com.ferbo.sgp.model.Empleado</class>
+    	<class>com.ferbo.sgp.model.Pais</class>
+    	<class>com.ferbo.sgp.model.Parametro</class>
+    	<class>com.ferbo.sgp.model.Vacaciones</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <!-- Datos de la conexión JDBC 
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/sgp"/>
+            <property name="hibernate.connection.username" value="sgpuser"/>
+            <property name="hibernate.connection.password" value="pruebas123"/>-->
+
+            <!-- Dialecto de Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+
+            <!-- Control de la creación de las tablas (opcional, dependiendo de tus necesidades) -->
+            <!-- <property name="hibernate.hbm2ddl.auto" value="update"/> -->
+
+            <!-- Mostrar las consultas SQL (opcional, útil para depurar) -->
+            <property name="hibernate.connection.datasource" value="java:comp/env/jdbc/sgp"/>
+            <!--<property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>-->
+        </properties>
+        
+    </persistence-unit>
+</persistence> 

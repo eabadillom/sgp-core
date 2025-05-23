@@ -1,8 +1,9 @@
-package com.ferbo.sgp.business;
+package com.ferbo.sgp.core.business;
 
-import com.ferbo.sgp.dao.DiaNoLaboralDAO;
-import com.ferbo.sgp.model.DiaNoLaboral;
-import com.ferbo.sgp.util.DateUtil;
+import com.ferbo.sgp.core.dao.DiaNoLaboralDAO;
+import com.ferbo.sgp.core.model.DiaNoLaboral;
+import com.ferbo.sgp.core.util.DateUtil;
+
 import java.util.Date;
 import java.util.List;
 
@@ -23,14 +24,14 @@ public class DiaNoLaboralBL {
 
     }
 
-    public static Boolean esFestivoEsteDia(Date dia, String pais) {
+    public static Boolean esDiaFestivo(Date fecha, String pais) {
 
         Boolean respuesta = false;
         
         List<DiaNoLaboral> diasNoLaborables = diasDecansoAnioVigente(pais);
         
          for(DiaNoLaboral diaNoLaboral : diasNoLaborables){
-             if(diaNoLaboral.getFecha().compareTo(dia) == 0 && diaNoLaboral.getOficial()){
+             if(diaNoLaboral.getFecha().compareTo(fecha) == 0 && diaNoLaboral.getOficial()){
                  respuesta = true;
                  break;
              }

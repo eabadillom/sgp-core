@@ -1,4 +1,4 @@
-package com.ferbo.sgp.dao;
+package com.ferbo.sgp.core.dao;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.ferbo.sgp.model.Pais;
+import com.ferbo.sgp.core.model.Pais;
 
 public class PaisDAO extends BaseDAO<Pais, Integer> {
 

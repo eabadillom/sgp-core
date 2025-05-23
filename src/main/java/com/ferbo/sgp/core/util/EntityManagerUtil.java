@@ -1,4 +1,4 @@
-package com.ferbo.sgp.util;
+package com.ferbo.sgp.core.util;
 
 import java.sql.Connection;
 import java.sql.SQLException;

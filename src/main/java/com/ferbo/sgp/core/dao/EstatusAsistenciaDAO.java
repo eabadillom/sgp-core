@@ -1,7 +1,8 @@
-package com.ferbo.sgp.dao;
+package com.ferbo.sgp.core.dao;
 
-import com.ferbo.sgp.model.EstatusAsistencia;
-import com.ferbo.sgp.util.SGPException;
+import com.ferbo.sgp.core.model.EstatusAsistencia;
+import com.ferbo.sgp.core.util.SGPException;
+
 import javax.persistence.EntityManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

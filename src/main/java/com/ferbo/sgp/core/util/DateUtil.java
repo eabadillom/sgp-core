@@ -1,4 +1,4 @@
-package com.ferbo.sgp.util;
+package com.ferbo.sgp.core.util;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -25,7 +25,7 @@ public class DateUtil {
 	
 	public static final String FORMATO_DD_MM_YYYY          = "dd/MM/yyyy";
 	public static final String FORMATO_YYYY_MM_DD          = "yyyy-MM-dd";
-	public static final String FORMATO_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd hh:mm:ss.SSS";
+	public static final String FORMATO_YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss.SSS";
 	public static final String FORMATO_ISO_Z = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 	public static final String FORMATO_DD_MM_YYYY_FULL     = "dd MMMM yyyy";
 	public static final String FORMATO_FECHA_CADENA 		= "dd 'de' MMMM 'de' yyyy";
@@ -62,7 +62,7 @@ public class DateUtil {
 	public static String PROP_CD_DOMINGO   = "D";
 	public static String PROP_CD_LUNES     = "L";
 	public static String PROP_CD_MARTES    = "M";
-	public static String PROP_CD_MIERCOLES = "MI";
+	public static String PROP_CD_MIERCOLES = "X";
 	public static String PROP_CD_JUEVES    = "J";
 	public static String PROP_CD_VIERNES   = "V";
 	public static String PROP_CD_SABADO    = "S";

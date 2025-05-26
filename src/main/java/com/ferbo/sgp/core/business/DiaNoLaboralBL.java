@@ -1,11 +1,11 @@
 package com.ferbo.sgp.core.business;
 
-import com.ferbo.sgp.core.dao.DiaNoLaboralDAO;
-import com.ferbo.sgp.core.model.DiaNoLaboral;
-import com.ferbo.sgp.core.util.DateUtil;
-
 import java.util.Date;
 import java.util.List;
+
+import com.ferbo.sgp.core.dao.DiaNoLaboralDAO;
+import com.ferbo.sgp.core.model.DiaNoLaboral;
+import com.ferbo.sgp.tools.time.DateTool;
 
 public class DiaNoLaboralBL {
 
@@ -13,10 +13,10 @@ public class DiaNoLaboralBL {
 
         DiaNoLaboralDAO diaNoLaboralDAO = new DiaNoLaboralDAO();
 
-        Date fechaInicio = DateUtil.now();
-        DateUtil.setDia(fechaInicio, 1);
-        DateUtil.setMes(fechaInicio, 1);
-        Date fechaFin = DateUtil.addYear(fechaInicio, 1);
+        Date fechaInicio = DateTool.now();
+        DateTool.setDia(fechaInicio, 1);
+        DateTool.setMes(fechaInicio, 1);
+        Date fechaFin = DateTool.addYear(fechaInicio, 1);
 
         List<DiaNoLaboral> diasNoLaborables = diaNoLaboralDAO.buscarPorPeriodo(pais, fechaInicio, fechaFin);
 

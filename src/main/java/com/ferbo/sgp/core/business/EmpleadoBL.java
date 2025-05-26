@@ -18,8 +18,9 @@ import com.ferbo.sgp.core.model.Empleado;
 import com.ferbo.sgp.core.model.EstatusAsistencia;
 import com.ferbo.sgp.core.model.Parametro;
 import com.ferbo.sgp.core.model.Vacaciones;
-import com.ferbo.sgp.core.util.DateUtil;
 import com.ferbo.sgp.core.util.SGPException;
+import com.ferbo.sgp.tools.time.DateTool;
+
 
 public class EmpleadoBL {
 
@@ -40,17 +41,17 @@ public class EmpleadoBL {
             throw new SGPException("El empleado " + empleado.getNombre() + " " + empleado.getPrimerApellido() + " " + empleado.getSegundoApellido() + " ya no trabaja en la empresa");
         }
 
-        int aniotmp = DateUtil.getAnio(empleado.getDatoEmpresarial().getFechaIngreso());
-        int mestmp = DateUtil.getMes(empleado.getDatoEmpresarial().getFechaIngreso());
-        int diatmp = DateUtil.getDia(empleado.getDatoEmpresarial().getFechaIngreso());
+        int aniotmp = DateTool.getAnio(empleado.getDatoEmpresarial().getFechaIngreso());
+        int mestmp = DateTool.getMes(empleado.getDatoEmpresarial().getFechaIngreso());
+        int diatmp = DateTool.getDia(empleado.getDatoEmpresarial().getFechaIngreso());
 
-        Date fechaaux = DateUtil.getDate(aniotmp, mestmp, diatmp);
+        Date fechaaux = DateTool.getDate(aniotmp, mestmp, diatmp);
 
         if (!empleado.getVacacion().isEmpty()) {
             fechaaux = empleado.getVacacion().get(empleado.getVacacion().size() - 1).getFechafin();
         }
 
-        while (fechaaux.before(DateUtil.now())) {
+        while (fechaaux.before(DateTool.now())) {
             Date fechainicio = null;
             Date fechafin = null;
             Date fechatmp = null;
@@ -59,7 +60,7 @@ public class EmpleadoBL {
 
             if (empleado.getVacacion().isEmpty()) {
                 fechainicio = fechaaux;
-                fechafin = DateUtil.addYear(fechaaux, 1);
+                fechafin = DateTool.addYear(fechaaux, 1);
                 ParametroDAO parametroDAO = new ParametroDAO(Parametro.class);
                 Parametro parametro = parametroDAO.buscarPorClave("DIVAC");
                 String sDias = parametro.getValor();
@@ -67,8 +68,8 @@ public class EmpleadoBL {
             } else {
                 dias = empleado.getVacacion().get(empleado.getVacacion().size() - 1).getDiastotales();
                 fechatmp = empleado.getVacacion().get(empleado.getVacacion().size() - 1).getFechafin();
-                fechainicio = DateUtil.addDay(fechatmp, 1);
-                fechafin = DateUtil.addYear(fechainicio, 1);
+                fechainicio = DateTool.addDay(fechatmp, 1);
+                fechafin = DateTool.addYear(fechainicio, 1);
 
                 int tamanio = empleado.getVacacion().size() + 1;
 
@@ -81,7 +82,7 @@ public class EmpleadoBL {
                 }
             }
 
-            fechafin = DateUtil.addDay(fechafin, -1);
+            fechafin = DateTool.addDay(fechafin, -1);
 
             Vacaciones ultimasvacaciones = new Vacaciones();
 
@@ -166,9 +167,9 @@ public class EmpleadoBL {
 
         List<DiaNoLaboral> diasDescanso = DiaNoLaboralBL.diasDecansoAnioVigente("MX");
         List<String> diasLaboralesEmpleado = new ArrayList<String>();
-        String diaLaborando = DateUtil.getDiaSemana(DateUtil.now());
-        Date hoy = DateUtil.now();
-        DateUtil.resetTime(hoy);
+        String diaLaborando = DateTool.getDiaSemana(DateTool.now());
+        Date hoy = DateTool.now();
+        DateTool.resetTime(hoy);
 
         diasLaboralesEmpleado = diasLaboralesPorSemana(empleado);
 
@@ -189,12 +190,12 @@ public class EmpleadoBL {
         AsistenciaDAO asistenciaDAO = new AsistenciaDAO();
         EstatusAsistenciaDAO estatusAsistenciaDAO = new EstatusAsistenciaDAO();
 
-        Date hoy = DateUtil.now();
-        Date ayerInicio = DateUtil.addDay(hoy, -1);
-        DateUtil.setTime(ayerInicio, 0, 0, 0, 0);
+        Date hoy = DateTool.now();
+        Date ayerInicio = DateTool.addDay(hoy, -1);
+        DateTool.setTime(ayerInicio, 0, 0, 0, 0);
 
-        Date ayerFin = DateUtil.addDay(hoy, -1);
-        DateUtil.setTime(ayerFin, 23, 59, 59, 999);
+        Date ayerFin = DateTool.addDay(hoy, -1);
+        DateTool.setTime(ayerFin, 23, 59, 59, 999);
 
         Optional<Asistencia> oAsistencia = null;
         Asistencia asistenciaAyer = null;
@@ -214,7 +215,7 @@ public class EmpleadoBL {
 				return;
 			}
         	
-        	diaSemana = DateUtil.getDiaSemana(ayerInicio);
+        	diaSemana = DateTool.getDiaSemana(ayerInicio);
         	
         	List<String> diasTrabajo = diasLaboralesPorSemana(empleado);
         	
@@ -227,7 +228,7 @@ public class EmpleadoBL {
         	if ( diasTrabajo.contains(diaSemana) == false) {
         		log.info("El empleado {} {} {} tiene asignado su día de descanso: {}.",
         				empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido(),
-        				DateUtil.getString(diaAsistencia, DateUtil.FORMATO_ISO_Z));
+        				diaSemana);
         		return;
         	}
         	
@@ -242,10 +243,10 @@ public class EmpleadoBL {
     		log.info("El empleado " + empleado.getNombre() + " " + empleado.getPrimerApellido() + " " + empleado.getSegundoApellido() + " no tiene asistencia del dia " + ayerInicio);
 			asistenciaAyer = new Asistencia();
 			
-			diaAsistencia = DateUtil.now();
-			diaAsistencia = DateUtil.addDay(diaAsistencia, -1);
+			diaAsistencia = DateTool.now();
+			diaAsistencia = DateTool.addDay(diaAsistencia, -1);
 			
-			DateUtil.setTime(diaAsistencia, 0, 0, 0, 0);
+			DateTool.setTime(diaAsistencia, 0, 0, 0, 0);
 			
 			statusAusencia = estatusAsistenciaDAO.buscarPorCodigo("F");
 			asistenciaAyer.setEmpleado(empleado);

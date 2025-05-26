@@ -2,7 +2,7 @@
 package com.ferbo.sgp.core.dao;
 
 import com.ferbo.sgp.core.model.Empleado;
-import com.ferbo.sgp.core.util.SGPException;
+import com.ferbo.sgp.tools.exceptions.SGPException;
 
 import java.util.List;
 import javax.persistence.EntityManager;

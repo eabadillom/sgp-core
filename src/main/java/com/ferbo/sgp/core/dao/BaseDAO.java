@@ -8,8 +8,8 @@ import javax.persistence.EntityManagerFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.ferbo.sgp.core.util.EntityManagerUtil;
-import com.ferbo.sgp.core.util.SGPException;
+import com.ferbo.sgp.core.tools.EntityManagerTool;
+import com.ferbo.sgp.tools.exceptions.SGPException;
 
 public abstract class BaseDAO<MODEL, PK> {
 
@@ -25,7 +25,7 @@ public abstract class BaseDAO<MODEL, PK> {
 	public EntityManager getEntityManager() {
 		EntityManager em = null;
 		try {
-			em = EntityManagerUtil.getEntityManager();
+			em = EntityManagerTool.getEntityManager();
 		} catch (Exception ex) {
 			log.error("Problema para obtener el entity manager...", ex);
 		}
@@ -38,12 +38,12 @@ public abstract class BaseDAO<MODEL, PK> {
 		EntityManager em = null;
 
 		try {
-			em = EntityManagerUtil.getEntityManager();
+			em = EntityManagerTool.getEntityManager();
 			model = em.find(modelClass, id);
 		} catch (Exception ex) {
 			log.warn("Problema para obtener el elemento por ID: {}", id);
 		} finally {
-			EntityManagerUtil.close(em);
+			EntityManagerTool.close(em);
 		}
 
 		return Optional.of(model);

@@ -1,4 +1,4 @@
-package com.ferbo.sgp.core.util;
+package com.ferbo.sgp.core.tools;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,8 +12,8 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.internal.SessionImpl;
 
-public class EntityManagerUtil {
-	private static Logger log = LogManager.getLogger(EntityManagerUtil.class);
+public class EntityManagerTool {
+	private static Logger log = LogManager.getLogger(EntityManagerTool.class);
 
 	protected static String PERSIST_UNIT = "sgpCR";
     protected static EntityManagerFactory emf = null;
@@ -26,7 +26,7 @@ public class EntityManagerUtil {
     public static Connection getConnection() {
     	
     	Connection connection;
-    	Session session = EntityManagerUtil.getEntityManager().unwrap(Session.class);
+    	Session session = EntityManagerTool.getEntityManager().unwrap(Session.class);
     	SessionImpl sessionImpl = (SessionImpl) session;
     	connection = sessionImpl.connection();
     	return connection;

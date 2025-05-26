@@ -18,7 +18,7 @@ import com.ferbo.sgp.core.model.Empleado;
 import com.ferbo.sgp.core.model.EstatusAsistencia;
 import com.ferbo.sgp.core.model.Parametro;
 import com.ferbo.sgp.core.model.Vacaciones;
-import com.ferbo.sgp.core.util.SGPException;
+import com.ferbo.sgp.tools.exceptions.SGPException;
 import com.ferbo.sgp.tools.time.DateTool;
 
 

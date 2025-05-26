@@ -1,4 +1,4 @@
-package com.ferbo.sgp.dao;
+package com.ferbo.sgp.core.dao;
 
 import java.util.Date;
 import java.util.List;
@@ -8,8 +8,7 @@ import javax.persistence.EntityManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.ferbo.sgp.model.DiaNoLaboral;
-import com.ferbo.sgp.util.DateUtil;
+import com.ferbo.sgp.core.model.DiaNoLaboral;
 
 public class DiaNoLaboralDAO extends BaseDAO<DiaNoLaboral, Integer> {
 	

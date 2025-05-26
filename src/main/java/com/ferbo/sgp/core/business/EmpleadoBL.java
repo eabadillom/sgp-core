@@ -1,21 +1,26 @@
-package com.ferbo.sgp.business;
+package com.ferbo.sgp.core.business;
 
-import com.ferbo.sgp.dao.AsistenciaDAO;
-import com.ferbo.sgp.dao.EmpleadoDAO;
-import com.ferbo.sgp.dao.EstatusAsistenciaDAO;
-import com.ferbo.sgp.dao.ParametroDAO;
-import com.ferbo.sgp.model.Asistencia;
-import com.ferbo.sgp.model.DiaNoLaboral;
-import com.ferbo.sgp.model.Empleado;
-import com.ferbo.sgp.model.Parametro;
-import com.ferbo.sgp.model.Vacaciones;
-import com.ferbo.sgp.util.DateUtil;
-import com.ferbo.sgp.util.SGPException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.ferbo.sgp.core.dao.AsistenciaDAO;
+import com.ferbo.sgp.core.dao.EmpleadoDAO;
+import com.ferbo.sgp.core.dao.EstatusAsistenciaDAO;
+import com.ferbo.sgp.core.dao.ParametroDAO;
+import com.ferbo.sgp.core.model.Asistencia;
+import com.ferbo.sgp.core.model.DiaNoLaboral;
+import com.ferbo.sgp.core.model.Empleado;
+import com.ferbo.sgp.core.model.EstatusAsistencia;
+import com.ferbo.sgp.core.model.Parametro;
+import com.ferbo.sgp.core.model.Vacaciones;
+import com.ferbo.sgp.tools.exceptions.SGPException;
+import com.ferbo.sgp.tools.time.DateTool;
+
 
 public class EmpleadoBL {
 
@@ -36,17 +41,17 @@ public class EmpleadoBL {
             throw new SGPException("El empleado " + empleado.getNombre() + " " + empleado.getPrimerApellido() + " " + empleado.getSegundoApellido() + " ya no trabaja en la empresa");
         }
 
-        int aniotmp = DateUtil.getAnio(empleado.getDatoEmpresarial().getFechaIngreso());
-        int mestmp = DateUtil.getMes(empleado.getDatoEmpresarial().getFechaIngreso());
-        int diatmp = DateUtil.getDia(empleado.getDatoEmpresarial().getFechaIngreso());
+        int aniotmp = DateTool.getAnio(empleado.getDatoEmpresarial().getFechaIngreso());
+        int mestmp = DateTool.getMes(empleado.getDatoEmpresarial().getFechaIngreso());
+        int diatmp = DateTool.getDia(empleado.getDatoEmpresarial().getFechaIngreso());
 
-        Date fechaaux = DateUtil.getDate(aniotmp, mestmp, diatmp);
+        Date fechaaux = DateTool.getDate(aniotmp, mestmp, diatmp);
 
         if (!empleado.getVacacion().isEmpty()) {
             fechaaux = empleado.getVacacion().get(empleado.getVacacion().size() - 1).getFechafin();
         }
 
-        while (fechaaux.before(DateUtil.now())) {
+        while (fechaaux.before(DateTool.now())) {
             Date fechainicio = null;
             Date fechafin = null;
             Date fechatmp = null;
@@ -55,7 +60,7 @@ public class EmpleadoBL {
 
             if (empleado.getVacacion().isEmpty()) {
                 fechainicio = fechaaux;
-                fechafin = DateUtil.addYear(fechaaux, 1);
+                fechafin = DateTool.addYear(fechaaux, 1);
                 ParametroDAO parametroDAO = new ParametroDAO(Parametro.class);
                 Parametro parametro = parametroDAO.buscarPorClave("DIVAC");
                 String sDias = parametro.getValor();
@@ -63,8 +68,8 @@ public class EmpleadoBL {
             } else {
                 dias = empleado.getVacacion().get(empleado.getVacacion().size() - 1).getDiastotales();
                 fechatmp = empleado.getVacacion().get(empleado.getVacacion().size() - 1).getFechafin();
-                fechainicio = DateUtil.addDay(fechatmp, 1);
-                fechafin = DateUtil.addYear(fechainicio, 1);
+                fechainicio = DateTool.addDay(fechatmp, 1);
+                fechafin = DateTool.addYear(fechainicio, 1);
 
                 int tamanio = empleado.getVacacion().size() + 1;
 
@@ -77,7 +82,7 @@ public class EmpleadoBL {
                 }
             }
 
-            fechafin = DateUtil.addDay(fechafin, -1);
+            fechafin = DateTool.addDay(fechafin, -1);
 
             Vacaciones ultimasvacaciones = new Vacaciones();
 
@@ -101,7 +106,14 @@ public class EmpleadoBL {
         }
     }
 
-    public static List<String> diasEmpleadoTrabaja(Empleado empleado) {
+    /**Devuelve los días de la semana que un empleado puede laborar.<br>
+     * Por ejemplo, si un empleado trabaja de lunes a sábado, se devuelve
+     * una lista con L, M. X, J, V, S, siendo los días Lunes, Martes,
+     * Miercoles, Jueves, Viernes y Sábado respectivamente.
+     * @param empleado
+     * @return
+     */
+    public static List<String> diasLaboralesPorSemana(Empleado empleado) {
         List<String> diasLaboralesEmpleado = new ArrayList<String>();
 
         if (empleado.getDatoEmpresarial().getDiaLunes()) {
@@ -145,7 +157,7 @@ public class EmpleadoBL {
             throw new SGPException("Error: El empleado no tiene informacion empresarial");
         }
 
-        if (diasEmpleadoTrabaja(empleado).isEmpty()) {
+        if (diasLaboralesPorSemana(empleado).isEmpty()) {
             System.out.println("Error: No tiene dias laborales asignados. Por favor contactar a RH");
         }
 
@@ -155,11 +167,11 @@ public class EmpleadoBL {
 
         List<DiaNoLaboral> diasDescanso = DiaNoLaboralBL.diasDecansoAnioVigente("MX");
         List<String> diasLaboralesEmpleado = new ArrayList<String>();
-        String diaLaborando = DateUtil.getDiaSemana(DateUtil.now());
-        Date hoy = DateUtil.now();
-        DateUtil.resetTime(hoy);
+        String diaLaborando = DateTool.getDiaSemana(DateTool.now());
+        Date hoy = DateTool.now();
+        DateTool.resetTime(hoy);
 
-        diasLaboralesEmpleado = diasEmpleadoTrabaja(empleado);
+        diasLaboralesEmpleado = diasLaboralesPorSemana(empleado);
 
         for (DiaNoLaboral diaDescanso : diasDescanso) {
             if (diaDescanso.getFecha().compareTo(hoy) == 0 && diaDescanso.getOficial()) {
@@ -174,53 +186,79 @@ public class EmpleadoBL {
         return false;
     }
 
-    public static void generarInasistencia(Empleado empleado) throws SGPException {
+    public static void generarAusencia(Empleado empleado) throws SGPException {
         AsistenciaDAO asistenciaDAO = new AsistenciaDAO();
         EstatusAsistenciaDAO estatusAsistenciaDAO = new EstatusAsistenciaDAO();
 
-        Date hoy = DateUtil.now();
-        Date ayerInicio = DateUtil.addDay(hoy, -1);
-        DateUtil.setTime(ayerInicio, 0, 0, 0, 0);
+        Date hoy = DateTool.now();
+        Date ayerInicio = DateTool.addDay(hoy, -1);
+        DateTool.setTime(ayerInicio, 0, 0, 0, 0);
 
-        Date ayerFin = DateUtil.addDay(hoy, -1);
-        DateUtil.setTime(ayerFin, 23, 59, 59, 999);
+        Date ayerFin = DateTool.addDay(hoy, -1);
+        DateTool.setTime(ayerFin, 23, 59, 59, 999);
 
+        Optional<Asistencia> oAsistencia = null;
         Asistencia asistenciaAyer = null;
+        Date diaAsistencia = null;
+        EstatusAsistencia statusAusencia = null;
+        String diaSemana = null;
+        
+        try {
+        	if (empleado.getDatoEmpresarial() == null) {
+				return;
+			}
 
-        String nombreDia = DateUtil.getDiaSemana(ayerInicio);
-
-        List<String> diasTrabajo = diasEmpleadoTrabaja(empleado);
-
-        if (diasTrabajo.isEmpty()) {
-            log.info("El empleado " + empleado.getNombre() + " " + empleado.getPrimerApellido() + " " + empleado.getSegundoApellido() + ", no tiene dias laborales asignados. Por favor contactar a RH");
-        } else {
-            if (!diasTrabajo.contains(nombreDia)) {
-                log.info("El empleado " + empleado.getNombre() + " " + empleado.getPrimerApellido() + " " + empleado.getSegundoApellido() + " por contrato no trabajo ayer.");
-            } else {
-
-                asistenciaAyer = asistenciaDAO.buscarPorEmpleadoFechaEntrada(empleado.getId(), ayerInicio, ayerFin);
-
-                if (asistenciaAyer == null) {
-                    log.info("El empleado " + empleado.getNombre() + " " + empleado.getPrimerApellido() + " " + empleado.getSegundoApellido() + " no tiene asistencia del dia " + ayerInicio);
-                    asistenciaAyer = new Asistencia();
-                    Date diaAsistencia = DateUtil.now();
-                    diaAsistencia = DateUtil.addDay(diaAsistencia, -1);
-                    DateUtil.setTime(diaAsistencia, 0, 0, 0, 0);
-                    asistenciaAyer.setEmpleado(empleado);
-                    asistenciaAyer.setFechaEntrada(diaAsistencia);
-                    asistenciaAyer.setFechaSalida(diaAsistencia);
-                    try {
-                        asistenciaAyer.setEstatus(estatusAsistenciaDAO.buscarPorCodigo("F"));
-                        asistenciaDAO.guardar(asistenciaAyer);
-                    } catch (Exception ex) {
-                        log.error("Error al momento de guardar la asistencia..." + ex);
-                        throw new SGPException("Hubo algun problema al momento de guardar la inasistencia");
-                    }
-                    asistenciaAyer = null;
-                } else {
-                    log.info("El empleado " + empleado.getNombre() + " " + empleado.getPrimerApellido() + " " + empleado.getSegundoApellido() + " asistio el dia " + ayerInicio);
-                }
-            }
+			
+        	
+        	if (  (empleado.getDatoEmpresarial().getFechaBaja() != null)
+        		&& (empleado.getDatoEmpresarial().getFechaBaja().compareTo(new Date()) > 0) ) {
+				return;
+			}
+        	
+        	diaSemana = DateTool.getDiaSemana(ayerInicio);
+        	
+        	List<String> diasTrabajo = diasLaboralesPorSemana(empleado);
+        	
+        	if (diasTrabajo.isEmpty()) {
+        		log.info("El empleado {} {} {} no tiene dias laborales asignados. Por favor contactar a RRHH.",
+        				empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
+        		return;
+        	}
+        	
+        	if ( diasTrabajo.contains(diaSemana) == false) {
+        		log.info("El empleado {} {} {} tiene asignado su día de descanso: {}.",
+        				empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido(),
+        				diaSemana);
+        		return;
+        	}
+        	
+        	oAsistencia = asistenciaDAO.buscarPorEmpleadoFechaEntrada(empleado.getId(), ayerInicio, ayerFin);
+    		
+    		if (oAsistencia.isPresent()) {
+    			log.info("El empleado {} {} {} asistio el dia {} ",
+    					empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido(), ayerInicio);
+    			return;
+    		}
+    		
+    		log.info("El empleado " + empleado.getNombre() + " " + empleado.getPrimerApellido() + " " + empleado.getSegundoApellido() + " no tiene asistencia del dia " + ayerInicio);
+			asistenciaAyer = new Asistencia();
+			
+			diaAsistencia = DateTool.now();
+			diaAsistencia = DateTool.addDay(diaAsistencia, -1);
+			
+			DateTool.setTime(diaAsistencia, 0, 0, 0, 0);
+			
+			statusAusencia = estatusAsistenciaDAO.buscarPorCodigo("F");
+			asistenciaAyer.setEmpleado(empleado);
+			asistenciaAyer.setFechaEntrada(diaAsistencia);
+			asistenciaAyer.setFechaSalida(diaAsistencia);
+			asistenciaAyer.setEstatus(statusAusencia);
+			
+			asistenciaDAO.guardar(asistenciaAyer);
+        	
+        } catch(SGPException ex) {
+        	log.error("Error al momento de guardar la asistencia..." + ex);
+            throw new SGPException("Hubo algun problema al momento de guardar la inasistencia");
         }
     }
 }

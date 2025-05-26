@@ -1,5 +1,5 @@
 
-package com.ferbo.sgp.model;
+package com.ferbo.sgp.core.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

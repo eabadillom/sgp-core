@@ -1,8 +1,9 @@
 
-package com.ferbo.sgp.dao;
+package com.ferbo.sgp.core.dao;
 
-import com.ferbo.sgp.model.Empleado;
-import com.ferbo.sgp.util.SGPException;
+import com.ferbo.sgp.core.model.Empleado;
+import com.ferbo.sgp.tools.exceptions.SGPException;
+
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -34,8 +35,8 @@ public class EmpleadoDAO extends BaseDAO<Empleado, Integer>{
             empleados = resultado.getResultList();
             
             for(Empleado empleadoaux : empleados){
-                log.info("Datos empresariales del empleado: " + empleadoaux.getDatoEmpresarial());
-                log.info("Vacaciones del empleado: " + empleadoaux.getVacacion());
+                log.debug("Datos empresariales del empleado: " + empleadoaux.getDatoEmpresarial());
+                log.debug("Vacaciones del empleado: " + empleadoaux.getVacacion());
             }
             
             log.info("Finaliza el proceso de obntener todos los empleados");

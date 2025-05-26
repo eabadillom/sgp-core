@@ -1,5 +1,5 @@
 
-package com.ferbo.sgp.model;
+package com.ferbo.sgp.core.model;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,7 +17,9 @@ import javax.persistence.Table;
 @Table(name = "det_vacaciones")
 public class Vacaciones implements Serializable {
     
-    @Id
+    private static final long serialVersionUID = -1814121746856810590L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     @Column(name = "id_vacaciones")
     private Integer idVacaciones;

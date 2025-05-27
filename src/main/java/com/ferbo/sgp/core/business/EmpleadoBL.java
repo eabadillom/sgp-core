@@ -30,6 +30,16 @@ public class EmpleadoBL {
         EmpleadoDAO empleadodao = new EmpleadoDAO();
         return empleadodao.obtenerTodos();
     }
+    
+    public static List<Empleado> obtenerEmpleadosActivos(Date fecha)
+    throws SGPException {
+    	List<Empleado> empleados = null;
+    	EmpleadoDAO empleadoDAO = new EmpleadoDAO();
+    	
+    	empleados = empleadoDAO.buscarActivos(fecha);
+    	
+    	return empleados;
+    }
 
     public static void generarAnioVacaciones(Empleado empleado) throws SGPException {
 

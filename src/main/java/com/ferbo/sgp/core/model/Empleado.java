@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -23,6 +25,9 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "det_empleado")
+@NamedQueries({
+	@NamedQuery(name = "Empleado.buscarActivos", query = "SELECT e FROM Empleado e WHERE e.datoEmpresarial.fechaBaja IS NULL OR :fecha <= e.datoEmpresarial.fechaBaja")
+})
 public class Empleado implements Serializable {
 
     private static final long serialVersionUID = 1L;

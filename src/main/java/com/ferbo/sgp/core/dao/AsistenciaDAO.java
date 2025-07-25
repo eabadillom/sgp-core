@@ -57,7 +57,7 @@ public class AsistenciaDAO extends BaseDAO<Asistencia, Integer> {
         
         try {
             em = this.getEntityManager();
-            listModel = em.createNamedQuery("Asistencia.findByIdEmpleadoAndFecha", Asistencia.class)
+            listModel = em.createNamedQuery("Asistencia.findByFaltasDeAyer", Asistencia.class)
                 .setParameter("inicio", inicio)
                 .setParameter("fin", fin)
                 .setParameter("codigo", codigo)

@@ -10,33 +10,10 @@ import com.ferbo.sgp.core.model.Empleado;
 public class NotifMovilBL 
 {
     
-    public static NotificacionMovilDTO obtenerMensaje(String operacion, Empleado empleado) 
+    public static NotificacionMovilDTO obtenerMensaje(int ausencias) 
     {
-        String incidencia;
-        String descripcion;
-
-        switch (operacion) {
-
-            case "retardo":
-            case "ausencia":
-                incidencia = "Notificiacion";
-                descripcion = " tiene ";
-                break;
-
-            default:
-                incidencia = "Solicitud";
-                descripcion = " ha solicitado ";
-                break;
-        }
-
-        String titulo = String.format("%s de %s pendiente", incidencia, operacion);
-        String contenido = String.format(
-                "El empleado %s %s %s%s",
-                empleado.getNombre(),
-                empleado.getPrimerApellido(),
-                descripcion,
-                operacion
-        );
+        String titulo ="Notificación de ausencias pendientes";
+        String contenido = "Se presentaron " + ausencias + " ausencias el día de ayer";
 
         NotificacionMovilDTO notificacionMovilDTO = new NotificacionMovilDTO(titulo, contenido);
 

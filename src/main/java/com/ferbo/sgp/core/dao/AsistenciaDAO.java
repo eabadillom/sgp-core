@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.ferbo.sgp.core.model.Asistencia;
+import java.util.List;
 
 public class AsistenciaDAO extends BaseDAO<Asistencia, Integer> {
 
@@ -48,5 +49,29 @@ public class AsistenciaDAO extends BaseDAO<Asistencia, Integer> {
 
 		return Optional.ofNullable(model);
 	}
+        
+    public List<Asistencia> buscarPorFaltasDeAyer(Date inicio, Date fin, String codigo)
+    {
+        List<Asistencia> listModel = null;
+        EntityManager em = null;
+        
+        try {
+            em = this.getEntityManager();
+            listModel = em.createNamedQuery("Asistencia.findByIdEmpleadoAndFecha", Asistencia.class)
+                .setParameter("inicio", inicio)
+                .setParameter("fin", fin)
+                .setParameter("codigo", codigo)
+                .getResultList();
+        }catch (NoResultException ex) {
+            log.warn("No se encontró registros de faltas de ayer");
+        } catch (Exception ex) {
+            listModel = null;
+            log.error("Problema para obtener el listado de faltas de asistencia de ayer");
+        } finally {
+            close(em);
+        }
+        
+        return listModel;
+    }
 
 }

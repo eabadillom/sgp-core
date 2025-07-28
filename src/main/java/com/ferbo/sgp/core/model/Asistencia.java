@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 @Table(name = "det_registro")
 @NamedQueries({
     @NamedQuery(name = "Asistencia.findByIdEmpleadoAndFecha", query = "SELECT a FROM Asistencia a WHERE a.empleado.id = :idEmpleado AND (a.fechaEntrada BETWEEN :fechaEntradaInicio AND :fechaEntradaFin)"),
+    @NamedQuery(name = "Asistencia.findByFaltasDeAyer", query = "SELECT a FROM Asistencia a WHERE (a.fechaEntrada BETWEEN :inicio AND :fin) AND a.estatus.codigo = :codigo"),
 })
 public class Asistencia implements Serializable{
     

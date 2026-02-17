@@ -80,32 +80,14 @@ public class Empleado implements Serializable {
     @Column(name = "curp")
     private String curp;
 
-    @Basic(optional = true)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "rfc")
-    private String rfc;
-
     @Size(max = 45)
     @Column(name = "correo")
     private String correo;
-
-    @Basic(optional = true)
-    @Column(name = "fecha_ingreso")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaIngreso;
-
-    @Size(max = 45)
-    @Column(name = "nss")
-    private String nss;
 
     @Basic(optional = false)
     @NotNull
     @Column(name = "activo")
     private short activo;
-
-    @Column(name = "sueldo_diario")
-    private BigDecimal sueldoDiario;
 
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "id_empleado_empresa")
@@ -124,7 +106,7 @@ public class Empleado implements Serializable {
         this.id = id;
     }
 
-    public Empleado(Integer id, String numero, String nombre, String primerApellido, String segundoApellido, Date fechaNacimiento, Date fechaRegistro, Date fechaModificacion, String curp, String rfc, String correo, Date fechaIngreso, String nss, short activo, BigDecimal sueldoDiario) {
+    public Empleado(Integer id, String numero, String nombre, String primerApellido, String segundoApellido, Date fechaNacimiento, Date fechaRegistro, Date fechaModificacion, String curp, String correo, short activo, BigDecimal sueldoDiario) {
         this.id = id;
         this.numero = numero;
         this.nombre = nombre;
@@ -134,12 +116,8 @@ public class Empleado implements Serializable {
         this.fechaRegistro = fechaRegistro;
         this.fechaModificacion = fechaModificacion;
         this.curp = curp;
-        this.rfc = rfc;
         this.correo = correo;
-        this.fechaIngreso = fechaIngreso;
-        this.nss = nss;
         this.activo = activo;
-        this.sueldoDiario = sueldoDiario;
     }
 
     public Integer getId() {
@@ -214,14 +192,6 @@ public class Empleado implements Serializable {
         this.curp = curp;
     }
 
-    public String getRfc() {
-        return rfc;
-    }
-
-    public void setRfc(String rfc) {
-        this.rfc = rfc;
-    }
-
     public String getCorreo() {
         return correo;
     }
@@ -230,36 +200,12 @@ public class Empleado implements Serializable {
         this.correo = correo;
     }
 
-    public Date getFechaIngreso() {
-        return fechaIngreso;
-    }
-
-    public void setFechaIngreso(Date fechaIngreso) {
-        this.fechaIngreso = fechaIngreso;
-    }
-
-    public String getNss() {
-        return nss;
-    }
-
-    public void setNss(String nss) {
-        this.nss = nss;
-    }
-
     public short getActivo() {
         return activo;
     }
 
     public void setActivo(short activo) {
         this.activo = activo;
-    }
-
-    public BigDecimal getSueldoDiario() {
-        return sueldoDiario;
-    }
-
-    public void setSueldoDiario(BigDecimal sueldoDiario) {
-        this.sueldoDiario = sueldoDiario;
     }
 
     public DatoEmpresarial getDatoEmpresarial() {

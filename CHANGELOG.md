@@ -6,7 +6,7 @@ Este proyecto sigue versionado semántico (SemVer) y el formato de [Keep a Chang
 
 ---
 
-## [0.1.0] - 2026-04-16
+## [0.1.1] - 2026-04-16
 
 ### Changed
 * Se actualiza dependencia de `mysql-connector-j` de `8.0.33` a `8.4.0`.

@@ -1,5 +1,9 @@
 package com.ferbo.sgp.core.business;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -271,4 +275,64 @@ public class EmpleadoBL {
             throw new SGPException("Hubo algun problema al momento de guardar la inasistencia");
         }
     }
+
+    public static void generarDiaNoLaboral(Empleado empleado) throws SGPException {
+
+        AsistenciaDAO asistenciaDAO = new AsistenciaDAO();
+        EstatusAsistenciaDAO estatusAsistenciaDAO = new EstatusAsistenciaDAO();
+
+        if (empleado == null) {
+            log.info("El empleado no puede ser vacío. Se pasa al siguente empleado.");
+            return;
+        }
+
+        Date horaEntrada = empleado.getDatoEmpresarial().getHoraEntrada();
+
+        if (horaEntrada == null) {
+            log.info("El empleado no tiene una hora de entrada asignada, favor de acutalizar. Se le asigna una por defecto.");
+            horaEntrada = getManianaMexico();
+            DateTool.setTime(horaEntrada, 7, 0, 0, 0);
+        }
+
+        Date horaSalida = empleado.getDatoEmpresarial().getHoraSalida();
+
+        if (horaSalida == null) {
+            log.info("El empleado no tiene una hora de salida asignada, favor de acutalizar. Se le asigna una por defecto.");
+            horaSalida = getManianaMexico();
+            DateTool.setTime(horaSalida, 16, 0, 0, 0);
+        }
+
+
+        Date horaIncio = getManianaMexico();
+        Date horaFin = getManianaMexico();
+        
+        DateTool.setTime(horaIncio, DateTool.getHora(horaEntrada), 0, 0);
+        DateTool.setTime(horaFin, DateTool.getHora(horaSalida), 0, 0);
+
+        EstatusAsistencia status = estatusAsistenciaDAO.buscarPorCodigo("D");
+
+        Asistencia asistencia = new Asistencia();
+
+        asistencia.setEmpleado(empleado);
+        asistencia.setEstatus(status);
+        asistencia.setFechaEntrada(horaIncio);
+        asistencia.setFechaSalida(horaFin);
+
+        asistenciaDAO.guardar(asistencia);
+    }
+
+    private static  Date getManianaMexico() {
+
+        ZoneId zone = ZoneId.of("America/Mexico_City");
+
+        return  Date.from(
+                LocalDate.now(zone)
+                    .plusDays(1)
+                    .atStartOfDay(zone)
+                    .toInstant()
+            );
+    }
+
 }
+
+

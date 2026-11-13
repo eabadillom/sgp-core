@@ -4,7 +4,7 @@
     <groupId>com.ferbo.sgp</groupId>
     <artifactId>sgp-core</artifactId>
     <packaging>jar</packaging>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.1.2-SNAPSHOT</version>
     <name>sgp-core</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -24,7 +24,7 @@
         <dependency>
         	<groupId>${project.groupId}</groupId>
         	<artifactId>sgp-tools</artifactId>
-        	<version>0.0.2-RELEASE</version>
+        	<version>0.0.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>javax.persistence</groupId>

@@ -39,4 +39,20 @@ public class DiaNoLaboralBL {
          return respuesta;
     }
 
+    public static Boolean esDiaFestivoAmpliado(Date fecha, String pais) {
+
+         Boolean respuesta = false;
+        
+        List<DiaNoLaboral> diasNoLaborables = diasDecansoAnioVigente(pais);
+        
+         for(DiaNoLaboral diaNoLaboral : diasNoLaborables){
+             if(diaNoLaboral.getFecha().compareTo(fecha) == 0){
+                 respuesta = true;
+                 break;
+             }
+         }
+         return respuesta;
+
+    }
+
 }

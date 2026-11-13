@@ -1,6 +1,7 @@
 package com.ferbo.sgp.core.business;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,8 @@ import com.ferbo.sgp.tools.time.DateTool;
 public class EmpleadoBL {
 
     private static final Logger log = LogManager.getLogger(EmpleadoBL.class);
+
+    private  static final List<String> diasSemana = Arrays.asList("L", "M", "X", "J", "V", "S", "D");
 
     public static List<Empleado> obtenerEmpleados() throws SGPException {
         EmpleadoDAO empleadodao = new EmpleadoDAO();
@@ -271,4 +274,135 @@ public class EmpleadoBL {
             throw new SGPException("Hubo algun problema al momento de guardar la inasistencia");
         }
     }
+
+    public static void generarDiaNoLaboral(Empleado empleado) throws SGPException {
+
+        Date horaInicio = DateTool.getMananaDateMexico();
+
+        Date horaFin = DateTool.getMananaDateMexico();
+        
+        asignarHorarioDeEmpleadoARegistro(empleado, horaInicio, horaFin);
+
+        AsistenciaDAO asistenciaDAO = new AsistenciaDAO();
+
+        EstatusAsistenciaDAO estatusAsistenciaDAO = new EstatusAsistenciaDAO();
+
+        EstatusAsistencia status = estatusAsistenciaDAO.buscarPorCodigo("D");
+
+        Asistencia asistencia = crearAsistencia(empleado, status, horaInicio, horaFin);
+
+        asistenciaDAO.guardar(asistencia);
+
+        log.info("Día no laboral, generado exitosamente para el empleado: {} {} {}", empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
+    }
+
+    private static  void asignarHorarioDeEmpleadoARegistro(Empleado empleado, Date horaInicio, Date horaFin) {
+
+        if (empleado == null) {
+            log.error("El empleado no puede ser vacío. Se pasa al siguente empleado.");
+            return;
+        }
+
+        Date horaEntrada = empleado.getDatoEmpresarial().getHoraEntrada();
+
+        if (horaEntrada == null) {
+            log.warn("El empleado {} {} {} no tiene una hora de entrada asignada, favor de acutalizar. Se le asigna una por defecto.", empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
+            DateTool.setTime(horaInicio, 7, 0, 0, 0);
+        } else {
+            DateTool.setTime(horaInicio, DateTool.getHora(horaEntrada), 0, 0);
+        }
+
+        Date horaSalida = empleado.getDatoEmpresarial().getHoraSalida();
+
+        if (horaSalida == null) {
+            log.warn("El empleado {} {} {} no tiene una hora de salida asignada, favor de acutalizar. Se le asigna una por defecto.", empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
+            DateTool.setTime(horaFin, 16, 0, 0, 0);
+        } else {
+            DateTool.setTime(horaFin, DateTool.getHora(horaSalida), 0, 0);
+        }
+        
+    }
+
+    public static void generarDiaDescanso(Empleado empleado) throws SGPException {
+
+        if (empleado == null) {
+            log.error("El empleado no puede ser vacío. Se pasa al siguente empleado.");
+            return;
+        }
+
+        List<String> diasTrabajo = diasLaboralesPorSemana(empleado);
+
+        if (diasTrabajo == null || diasTrabajo.size() == 0) {
+            log.warn("El empleado {} {} {} no tiene dias laborales asignados. Por favor contactar a RRHH.",
+        				empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
+        	return;
+        } 
+
+        if (diasTrabajo.size() == 7) {
+            log.warn("El empleado {} {} {} trabaja toda la semana.", empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
+            return;
+        }
+
+        Date maniana = DateTool.getMananaDateMexico();
+
+        List<String> diasDescanso = getDiasDescansoPorEmpleado(diasTrabajo);
+
+        String nombreDiaManiana = DateTool.getDiaSemana(maniana);
+
+        String diaManiana = nombreDiaManiana.substring(0, 1);
+
+        diaManiana = diaManiana.toUpperCase();
+
+        if (!diasDescanso.contains(diaManiana)) {
+            log.info("El empleado {} {} {} no descansa el día de mañana, por lo tanto no se genera su registro.", empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
+            return;
+        }
+
+        AsistenciaDAO asistenciaDAO = new AsistenciaDAO();
+
+        EstatusAsistenciaDAO estatusAsistenciaDAO = new EstatusAsistenciaDAO();
+
+        Date horaInicio = DateTool.getMananaDateMexico();
+        
+        Date horaFin = DateTool.getMananaDateMexico();
+
+        asignarHorarioDeEmpleadoARegistro(empleado, horaInicio, horaFin);
+
+        EstatusAsistencia estatusAsistencia = estatusAsistenciaDAO.buscarPorCodigo("D");
+
+        Asistencia asistencia = crearAsistencia(empleado, estatusAsistencia, horaInicio, horaFin);
+        
+        asistenciaDAO.guardar(asistencia);
+
+        log.info("Día de descanso generado exitosamente para el empleado: {} {} {}", empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
+
+    }
+
+    private static Asistencia crearAsistencia(Empleado empleado, EstatusAsistencia estatusAsistencia, Date horaIncio, Date horaFin) throws SGPException {
+
+        Asistencia asistencia = new Asistencia();
+
+        asistencia.setEmpleado(empleado);
+        asistencia.setEstatus(estatusAsistencia);
+        asistencia.setFechaEntrada(horaIncio);
+        asistencia.setFechaSalida(horaFin);
+
+        return  asistencia;
+    }
+
+    private static List<String> getDiasDescansoPorEmpleado(List<String> diasLoborables) {
+
+        List<String> diasDescanso = new ArrayList<>();
+
+        for (int i = 0; i < diasSemana.size(); i++) {
+
+            if (!diasLoborables.contains(diasSemana.get(i))) {
+                diasDescanso.add(diasSemana.get(i));
+            }
+        }
+        return diasDescanso;
+    }
+
 }
+
+

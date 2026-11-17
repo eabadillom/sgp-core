@@ -27,8 +27,6 @@ public class EmpleadoBL {
 
     private static final Logger log = LogManager.getLogger(EmpleadoBL.class);
 
-    private  static final List<String> diasSemana = Arrays.asList("L", "M", "X", "J", "V", "S", "D");
-
     private  static final String GMT6 = "GMT-06:00";
 
     public static List<Empleado> obtenerEmpleados() throws SGPException {
@@ -396,10 +394,10 @@ public class EmpleadoBL {
 
         List<String> diasDescanso = new ArrayList<>();
 
-        for (int i = 0; i < diasSemana.size(); i++) {
+        for (int i = 0; i < DateTool.getDiasSemana().size() ; i++) {
 
-            if (!diasLoborables.contains(diasSemana.get(i))) {
-                diasDescanso.add(diasSemana.get(i));
+            if (!diasLoborables.contains(DateTool.getDiasSemana().get(i))) {
+                diasDescanso.add(DateTool.getDiasSemana().get(i));
             }
         }
         return diasDescanso;

@@ -39,7 +39,7 @@ public class DiaNoLaboralBL {
          return respuesta;
     }
 
-    public static Boolean esDiaFestivoAmpliado(Date fecha, String pais) {
+    public static Boolean esDiaNoLaboral(Date fecha, String pais) {
 
          Boolean respuesta = false;
         

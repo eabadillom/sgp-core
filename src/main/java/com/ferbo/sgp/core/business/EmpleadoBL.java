@@ -305,7 +305,7 @@ public class EmpleadoBL {
         Date horaEntrada = empleado.getDatoEmpresarial().getHoraEntrada();
 
         if (horaEntrada == null) {
-            log.warn("El empleado {} {} {} no tiene una hora de entrada asignada, favor de acutalizar. Se le asigna una por defecto.", empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
+            log.warn("El empleado {} {} {} no tiene una hora de entrada asignada, favor de actualizar. Se le asigna una por defecto.", empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
             DateTool.setTime(horaInicio, 7, 0, 0, 0);
         } else {
             DateTool.setTime(horaInicio, DateTool.getHora(horaEntrada), 0, 0);
@@ -314,7 +314,7 @@ public class EmpleadoBL {
         Date horaSalida = empleado.getDatoEmpresarial().getHoraSalida();
 
         if (horaSalida == null) {
-            log.warn("El empleado {} {} {} no tiene una hora de salida asignada, favor de acutalizar. Se le asigna una por defecto.", empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
+            log.warn("El empleado {} {} {} no tiene una hora de salida asignada, favor de actualizar. Se le asigna una por defecto.", empleado.getNombre(), empleado.getPrimerApellido(), empleado.getSegundoApellido());
             DateTool.setTime(horaFin, 16, 0, 0, 0);
         } else {
             DateTool.setTime(horaFin, DateTool.getHora(horaSalida), 0, 0);

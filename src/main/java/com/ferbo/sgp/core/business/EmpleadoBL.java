@@ -26,8 +26,6 @@ public class EmpleadoBL {
 
     private static final Logger log = LogManager.getLogger(EmpleadoBL.class);
 
-    private  static final String GMT6 = "GMT-06:00";
-
     public static List<Empleado> obtenerEmpleados() throws SGPException {
         EmpleadoDAO empleadodao = new EmpleadoDAO();
         return empleadodao.obtenerTodos();
@@ -276,9 +274,9 @@ public class EmpleadoBL {
 
     public static void generarDiaNoLaboral(Empleado empleado) throws SGPException {
 
-        Date horaInicio = DateTool.getMananaDatePorZonaHoraria(GMT6);
+        Date horaInicio = DateTool.getManianaDate();
 
-        Date horaFin = DateTool.getMananaDatePorZonaHoraria(GMT6);
+        Date horaFin = DateTool.getManianaDate();
         
         asignarHorarioDeEmpleadoARegistro(empleado, horaInicio, horaFin);
 
@@ -342,7 +340,7 @@ public class EmpleadoBL {
             return;
         }
 
-        Date maniana = DateTool.getMananaDatePorZonaHoraria(GMT6);
+        Date maniana = DateTool.getManianaDate();
 
         List<String> diasDescanso = getDiasDescansoPorEmpleado(diasTrabajo);
 
@@ -361,9 +359,9 @@ public class EmpleadoBL {
 
         EstatusAsistenciaDAO estatusAsistenciaDAO = new EstatusAsistenciaDAO();
 
-        Date horaInicio = DateTool.getMananaDatePorZonaHoraria(GMT6);
+        Date horaInicio = DateTool.getManianaDate();
         
-        Date horaFin = DateTool.getMananaDatePorZonaHoraria(GMT6);
+        Date horaFin = DateTool.getManianaDate();
 
         asignarHorarioDeEmpleadoARegistro(empleado, horaInicio, horaFin);
 
